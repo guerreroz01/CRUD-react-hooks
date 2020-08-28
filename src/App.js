@@ -1,24 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import UserTable from "./components/UserTable";
+import { v4 as uuidV4 } from "uuid";
+import AddUserForm from "./components/AddUserForm";
 
 function App() {
+  const userData = [
+    { id: uuidV4(), name: "Tania", username: "floppy" },
+    { id: uuidV4(), name: "Marcos", username: "crappy" },
+    { id: uuidV4(), name: "Luis", username: "beny" },
+  ];
+
+  console.log(uuidV4());
+  //state
+  const [users, setUser] = useState(userData);
+
+  //agregar usuario
+  const addUser = (user) => {
+    user.id = uuidV4();
+    setUser([...users, user]);
+  };
+
+  const deleteUser = (id) => {
+    const newUsers = users.filter((elem) => elem.id !== id);
+    setUser(newUsers);
+  };
+
+  const editUser = (user) => {
+    const newUsers = users.filter((elem) => elem.id !== user.id);
+    newUsers.push(user);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h1>CRUD App with Hooks</h1>
+      <div className="flex-row">
+        <div className="flex-large">
+          <h2>Add user</h2>
+          <AddUserForm addUser={addUser}></AddUserForm>
+        </div>
+        <div className="flex-large">
+          <h2>View users</h2>
+          <UserTable deleteUser={deleteUser} users={users}></UserTable>
+        </div>
+      </div>
     </div>
   );
 }
