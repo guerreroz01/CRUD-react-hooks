@@ -2,18 +2,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 
 function AddUserForm(props) {
+  const { addUser, editEnable, editUser } = props;
   const { register, errors, handleSubmit } = useForm();
-
-  const { addUser } = props;
-
-  const onSubmit = (data, e) => {
-    //prevenir el envio del form
-    e.preventDefault();
-    //resetear los campos
-    e.target.reset();
-
-    addUser(data);
-  };
 
   const requiredColor = (error) => {
     if (error.name) {
@@ -36,9 +26,29 @@ function AddUserForm(props) {
     }
   };
 
+  const editUserHandler = (data, e) => {
+    e.preventDefault();
+    e.target.reset();
+
+    data.id = editEnable[1];
+    editUser(data);
+  };
+  const onSubmit = (data, e) => {
+    e.preventDefault();
+    e.target.reset();
+
+    addUser(data);
+  };
+
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        onSubmit={
+          editEnable.length
+            ? handleSubmit(editUserHandler)
+            : handleSubmit(onSubmit)
+        }
+      >
         <label>Name</label>
         <input
           type="text"
@@ -67,7 +77,7 @@ function AddUserForm(props) {
           })}
         />
         {errors.username && requiredColor(errors)}
-        <button>Add new user</button>
+        <button>{editEnable.length ? "Edit User" : "Add new user"}</button>
       </form>
     </>
   );

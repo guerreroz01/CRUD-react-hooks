@@ -10,9 +10,9 @@ function App() {
     { id: uuidV4(), name: "Luis", username: "beny" },
   ];
 
-  console.log(uuidV4());
   //state
   const [users, setUser] = useState(userData);
+  const [editEnable, setEditEnable] = useState([]);
 
   //agregar usuario
   const addUser = (user) => {
@@ -28,6 +28,12 @@ function App() {
   const editUser = (user) => {
     const newUsers = users.filter((elem) => elem.id !== user.id);
     newUsers.push(user);
+    setUser(newUsers);
+    setEditEnable([]);
+  };
+
+  const editHandler = (user) => {
+    setEditEnable([true, user.id]);
   };
 
   return (
@@ -36,11 +42,19 @@ function App() {
       <div className="flex-row">
         <div className="flex-large">
           <h2>Add user</h2>
-          <AddUserForm addUser={addUser}></AddUserForm>
+          <AddUserForm
+            editUser={editUser}
+            editEnable={editEnable}
+            addUser={addUser}
+          ></AddUserForm>
         </div>
         <div className="flex-large">
           <h2>View users</h2>
-          <UserTable deleteUser={deleteUser} users={users}></UserTable>
+          <UserTable
+            editHandler={editHandler}
+            deleteUser={deleteUser}
+            users={users}
+          ></UserTable>
         </div>
       </div>
     </div>

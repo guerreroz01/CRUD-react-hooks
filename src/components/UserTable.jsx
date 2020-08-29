@@ -1,5 +1,4 @@
 import React from "react";
-import { v4 as uuidV4 } from "uuid";
 
 function UserTable(props) {
   return (
@@ -20,7 +19,12 @@ function UserTable(props) {
                   <td>{elem.name}</td>
                   <td>{elem.username}</td>
                   <td>
-                    <button className="button muted-button">Edit</button>
+                    <button
+                      onClick={() => props.editHandler(elem)}
+                      className="button muted-button"
+                    >
+                      Edit
+                    </button>
                     <button
                       onClick={() => {
                         props.deleteUser(elem.id);
